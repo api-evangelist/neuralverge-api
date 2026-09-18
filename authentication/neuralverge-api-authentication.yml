@@ -1,0 +1,13 @@
+generated: '2026-09-18'
+method: derived
+source: openapi/neuralverge-api-openapi.json
+summary:
+  types:
+  - http
+schemes:
+- name: BearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: API Key
+  sources:
+  - openapi/neuralverge-api-openapi.json

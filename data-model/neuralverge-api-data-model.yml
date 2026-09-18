@@ -1,0 +1,50 @@
+generated: '2026-09-18'
+method: derived
+source: openapi/neuralverge-api-openapi.json + docs.neuralverge.ai product pages
+note: >-
+  The OpenAPI uses inline request/response schemas with no components.schemas and
+  no $ref graph, so the entity model is derived from the operation surface and the
+  documented request/response shapes rather than from schema references. The only
+  cross-operation relationship is the research Session (created by run-research,
+  read by get-session-status via session_id). Every other operation is an
+  independent, self-contained lookup that returns a result object.
+entities:
+  - name: ResearchSession
+    created_by: 'POST /functions/v1/run-research'
+    read_by: 'GET /functions/v1/get-session-status'
+    key: session_id
+    fields: [session_id, status, result]
+    states: [running, complete, failed]
+  - name: AgentRun
+    created_by: 'POST /functions/v1/run-agent'
+    note: Executes a saved agent; returns a session_id (async, same session model as ResearchSession).
+  - name: SearchResult
+    created_by: 'POST /functions/v1/run-search'
+    note: Synchronous ranked web results; no persisted id.
+  - name: ExtractResult
+    created_by: 'POST /functions/v1/run-extract'
+    note: Structured data extracted from a URL against instructions/schema.
+  - name: LinkedInProfile
+    created_by: ['POST /functions/v1/run-linkedin-email', 'POST /functions/v1/run-linkedin-domain']
+  - name: LinkedInCompany
+    created_by: 'POST /functions/v1/run-linkedin-company-search'
+  - name: LinkedInPerson
+    created_by: ['POST /functions/v1/run-linkedin-people-search', 'POST /functions/v1/run-linkedin-company-employee']
+  - name: EmailRecord
+    created_by: ['POST /functions/v1/run-email-enrichment', 'POST /functions/v1/run-email-validation', 'POST /functions/v1/run-email-finder']
+  - name: PhoneRecord
+    created_by: ['POST /functions/v1/run-phone-enrichment', 'POST /functions/v1/run-phone-enrichment-us']
+  - name: Company
+    created_by: 'POST /functions/v1/run-crunchbase-company'
+  - name: AmazonProduct
+    created_by: ['POST /functions/v1/run-amazon-product-search', 'POST /functions/v1/run-amazon-product', 'POST /functions/v1/run-amazon-product-offers']
+  - name: AmazonSeller
+    created_by: ['POST /functions/v1/run-amazon-seller', 'POST /functions/v1/run-amazon-seller-products']
+relationships:
+  - from: ResearchSession
+    to: ResearchSession
+    type: belongs_to
+    via: session_id
+    note: get-session-status resolves a session created by run-research (or run-agent) via session_id.
+id_reference_fields:
+  - session_id

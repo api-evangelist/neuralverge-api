@@ -1,0 +1,63 @@
+generated: '2026-09-18'
+method: probed
+source: Live probes on 2026-09-18 across all four known hosts.
+note: >-
+  No /.well-known discovery documents are served on any host. The
+  registrable/www hosts return a 404 SPA shell (Vercel/Next, ~24.7KB HTML) for
+  every path; api.neuralverge.ai (Supabase edge router) returns a JSON 404
+  {"error":"requested path is invalid"} for every path; docs.neuralverge.ai
+  (Mintlify) 404s every probed path EXCEPT /.well-known/agent-card.json, which
+  serves a real A2A agent card (captured in ../a2a/). No security.txt,
+  openid-configuration, oauth-authorization-server, oauth-protected-resource,
+  api-catalog, ai-plugin.json, or apis.json anywhere. No WellKnown or SecurityTxt
+  pointer is emitted because no document (other than the agent card, which has its
+  own AgentCard pointer) returned a 200.
+hosts:
+  - host: https://neuralverge.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404, file: null}
+      - {path: /.well-known/openid-configuration, status: 404, file: null}
+      - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+      - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+      - {path: /.well-known/api-catalog, status: 404, file: null}
+      - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+      - {path: /apis.json, status: 404, file: null}
+      - {path: /apis.yml, status: 404, file: null}
+      - {path: /.well-known/agent-card.json, status: 404, file: null}
+      - {path: /.well-known/agent.json, status: 404, file: null}
+  - host: https://www.neuralverge.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404, file: null}
+      - {path: /.well-known/openid-configuration, status: 404, file: null}
+      - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+      - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+      - {path: /.well-known/api-catalog, status: 404, file: null}
+      - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+      - {path: /apis.json, status: 404, file: null}
+      - {path: /.well-known/agent-card.json, status: 404, file: null}
+      - {path: /.well-known/agent.json, status: 404, file: null}
+  - host: https://api.neuralverge.ai
+    catch_all: false
+    catch_all_note: 'Returns JSON 404 {"error":"requested path is invalid"} per path.'
+    documents:
+      - {path: /.well-known/security.txt, status: 404, file: null}
+      - {path: /.well-known/openid-configuration, status: 404, file: null}
+      - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+      - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+      - {path: /.well-known/api-catalog, status: 404, file: null}
+      - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+      - {path: /apis.json, status: 404, file: null}
+      - {path: /.well-known/agent-card.json, status: 404, file: null}
+      - {path: /.well-known/agent.json, status: 404, file: null}
+  - host: https://docs.neuralverge.ai
+    documents:
+      - {path: /.well-known/security.txt, status: 404, file: null}
+      - {path: /.well-known/openid-configuration, status: 404, file: null}
+      - {path: /.well-known/oauth-authorization-server, status: 404, file: null}
+      - {path: /.well-known/oauth-protected-resource, status: 404, file: null}
+      - {path: /.well-known/api-catalog, status: 404, file: null}
+      - {path: /.well-known/ai-plugin.json, status: 404, file: null}
+      - {path: /apis.json, status: 404, file: null}
+      - {path: /apis.yml, status: 404, file: null}
+      - {path: /.well-known/agent-card.json, status: 200, file: ../a2a/neuralverge-api-agent-card.json}
+      - {path: /.well-known/agent.json, status: 404, file: null}

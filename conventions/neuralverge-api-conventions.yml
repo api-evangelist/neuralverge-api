@@ -1,0 +1,69 @@
+generated: '2026-09-18'
+method: searched
+source: >-
+  https://docs.neuralverge.ai/authentication, /errors-and-rate-limits,
+  /ai-research, /search, /mcp-server, plus derivation from
+  openapi/neuralverge-api-openapi.json.
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <API_KEY>'
+  note: Same token used for REST and the remote MCP server.
+base_url: https://api.neuralverge.ai
+path_convention:
+  pattern: /functions/v1/{action}
+  note: Supabase Edge Functions; each capability is an action verb (run-*, get-*).
+execution_model:
+  synchronous:
+    note: >-
+      Most endpoints return their result in the same response (search, extract,
+      all data-source lookups, run-agent).
+  asynchronous:
+    operations: ['POST /functions/v1/run-research']
+    pattern: >-
+      run-research returns a session_id immediately; poll GET
+      /functions/v1/get-session-status every 2-5s until status is complete or
+      failed.
+pagination:
+  style: page-number
+  note: >-
+    LinkedIn search/employee endpoints use startPage plus maxResults/maxItems;
+    run-amazon-product-search paginates result cards. Search uses max_results as
+    a count limit. No cursor-based pagination and no Link headers.
+  params: [startPage, maxResults, maxItems, max_results]
+idempotency:
+  supported: false
+  coverage: none
+  note: >-
+    No Idempotency-Key header or equivalent replay-protection mechanism is
+    documented on any write/action endpoint. Every run-* call is a metered POST
+    that spends points; a retry re-executes and re-charges. Agents must guard
+    against duplicate submission client-side.
+reversibility:
+  state: na
+  note: >-
+    The action surface is metered lookups and research/extraction jobs that
+    return data; none creates a durable, caller-mutable resource, so there is no
+    cancel/refund/void/undo operation and nothing to reverse. Points spent are
+    consumed by the run (402 on exhaustion) and are not refundable via the API.
+    Reversibility, dry-run and idempotency are all na/none for this reason.
+dry_run_mode:
+  supported: false
+  state: na
+request_tracing:
+  request_id_header: null
+  note: No request-id / trace-id response header is documented.
+versioning:
+  scheme: uri-path
+  current: v1
+  note: Path segment /functions/v1/; OpenAPI info.version 1.0.0.
+error_envelope:
+  shape: '{"error": "<message>"}'
+  rfc9457: false
+  ref: errors/neuralverge-api-problem-types.yml
+rate_limit_signaling:
+  headers: none
+  note: >-
+    No X-RateLimit-*/RateLimit-*/Retry-After headers documented. Limits are
+    enforced by server-side queueing; a request that cannot start within 60s
+    fails with 429. See rate-limits/neuralverge-api-rate-limits.yml.
+  ref: rate-limits/neuralverge-api-rate-limits.yml

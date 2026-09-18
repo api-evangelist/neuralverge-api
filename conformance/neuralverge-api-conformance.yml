@@ -1,0 +1,46 @@
+generated: '2026-09-18'
+method: derived
+source: >-
+  Derived from openapi/neuralverge-api-openapi.json, the live MCP server
+  (tools/list probed 2026-09-18), and the A2A agent card at
+  docs.neuralverge.ai/.well-known/agent-card.json.
+standards:
+  - id: mcp
+    name: Model Context Protocol (Streamable HTTP)
+    conforms: true
+    evidence: >-
+      Remote MCP server at api.neuralverge.ai/functions/v1/mcp-server; anonymous
+      tools/list returned 200 with 15 tools and JSON Schema draft-07 inputSchemas.
+  - id: a2a
+    name: Agent2Agent (A2A) AgentCard
+    conforms: true
+    grade: flavored
+    evidence: >-
+      /.well-known/agent-card.json served on docs host; passes core structural
+      checks but uses non-spec supportedInterfaces and omits required description
+      (see a2a/neuralverge-api-a2a.yml).
+  - id: json-schema-draft-07
+    name: JSON Schema draft-07
+    conforms: true
+    evidence: MCP tool inputSchemas declare $schema http://json-schema.org/draft-07/schema#.
+  - id: oauth2
+    conforms: false
+    evidence: Auth is a static bearer API key (http/bearer), no OAuth2 flows.
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Error envelope is a flat {"error": "..."} object, not application/problem+json.'
+domain_standard:
+  present: false
+  note: >-
+    The data-enrichment / KYB / web-research market has no widely adopted
+    machine-readable contract standard for this API to declare, so no
+    domain-standard conformance is asserted (reward-only; absence is not a
+    penalty).
+compliance:
+  published_certifications: []
+  note: >-
+    No trust center or named certifications (SOC 2 / ISO 27001 / PCI / HIPAA /
+    FedRAMP) found (probe-security-programs 2026-09-18: trust=none). No Compliance
+    pointer emitted.

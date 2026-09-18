@@ -1,0 +1,60 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for NeuralVerge API
+  version: 1.0.0
+extends: openapi/neuralverge-api-openapi.json
+x-generated: '2026-09-18'
+x-method: generated
+x-note: >-
+  The source spec declares no operationId on any of its 21 operations. This
+  overlay adds a stable operationId per operation (so tools, the MCP crosswalk,
+  and agent skills can reference them by id) and records the API Evangelist
+  enrichment marker. The original openapi/neuralverge-api-openapi.json is never
+  mutated.
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: '2026-09-18'
+      x-apievangelist-mcp: https://api.neuralverge.ai/functions/v1/mcp-server
+  - target: $.paths['/functions/v1/run-research'].post
+    update: {operationId: runResearch}
+  - target: $.paths['/functions/v1/run-agent'].post
+    update: {operationId: runAgent}
+  - target: $.paths['/functions/v1/get-session-status'].get
+    update: {operationId: getSessionStatus}
+  - target: $.paths['/functions/v1/run-search'].post
+    update: {operationId: runSearch}
+  - target: $.paths['/functions/v1/run-extract'].post
+    update: {operationId: runExtract}
+  - target: $.paths['/functions/v1/run-linkedin-email'].post
+    update: {operationId: runLinkedinEmail}
+  - target: $.paths['/functions/v1/run-linkedin-domain'].post
+    update: {operationId: runLinkedinDomain}
+  - target: $.paths['/functions/v1/run-linkedin-company-search'].post
+    update: {operationId: runLinkedinCompanySearch}
+  - target: $.paths['/functions/v1/run-linkedin-people-search'].post
+    update: {operationId: runLinkedinPeopleSearch}
+  - target: $.paths['/functions/v1/run-linkedin-company-employee'].post
+    update: {operationId: runLinkedinCompanyEmployee}
+  - target: $.paths['/functions/v1/run-email-enrichment'].post
+    update: {operationId: runEmailEnrichment}
+  - target: $.paths['/functions/v1/run-email-validation'].post
+    update: {operationId: runEmailValidation}
+  - target: $.paths['/functions/v1/run-email-finder'].post
+    update: {operationId: runEmailFinder}
+  - target: $.paths['/functions/v1/run-phone-enrichment'].post
+    update: {operationId: runPhoneEnrichment}
+  - target: $.paths['/functions/v1/run-phone-enrichment-us'].post
+    update: {operationId: runPhoneEnrichmentUs}
+  - target: $.paths['/functions/v1/run-crunchbase-company'].post
+    update: {operationId: runCrunchbaseCompany}
+  - target: $.paths['/functions/v1/run-amazon-product-search'].post
+    update: {operationId: runAmazonProductSearch}
+  - target: $.paths['/functions/v1/run-amazon-product'].post
+    update: {operationId: runAmazonProduct}
+  - target: $.paths['/functions/v1/run-amazon-product-offers'].post
+    update: {operationId: runAmazonProductOffers}
+  - target: $.paths['/functions/v1/run-amazon-seller'].post
+    update: {operationId: runAmazonSeller}
+  - target: $.paths['/functions/v1/run-amazon-seller-products'].post
+    update: {operationId: runAmazonSellerProducts}

@@ -1,0 +1,13 @@
+generated: '2026-09-18'
+method: searched
+source: >-
+  Searched npm (registry.npmjs.org search + no @neuralverge scope), PyPI
+  (pypi.org/pypi/neuralverge/json 404), RubyGems (404), and the docs/developer
+  pages on 2026-09-18.
+packages: []
+note: >-
+  No first-party client libraries / SDKs published. NeuralVerge is consumed
+  directly as a REST API (Authorization: Bearer) or via its remote MCP server;
+  the docs show curl and MCP-client setup only, no language SDK. npm search for
+  "neuralverge" returns zero results; pypi and rubygems 404. No SDKs pointer
+  emitted. Re-check on future rounds — an honest absence, not a guess.

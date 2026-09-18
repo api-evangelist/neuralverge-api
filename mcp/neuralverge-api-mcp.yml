@@ -1,0 +1,93 @@
+generated: '2026-09-18'
+method: searched
+status: published
+source: https://docs.neuralverge.ai/mcp-server
+deployment:
+  mode: remote
+  endpoint: https://api.neuralverge.ai/functions/v1/mcp-server
+  install: null
+  package: null
+  auth: api-key
+  verified: probed
+server:
+  name: neuralverge
+  transport: http
+  description: >-
+    NeuralVerge exposes its full REST API as a remote Model Context Protocol
+    server over the Streamable HTTP transport. The server is stateless (each
+    request handled independently) and every tool is a thin 1:1 wrapper around
+    the corresponding REST endpoint. Bearer token (same as REST) required;
+    Accept must include text/event-stream.
+  url: https://api.neuralverge.ai/functions/v1/mcp-server
+  transport_detail: streamable-http
+  stateless: true
+  auth:
+    scheme: bearer
+    header: 'Authorization: Bearer <API_KEY>'
+    note: >-
+      401 Unauthorized before any tool runs on missing/invalid token. Once
+      authenticated, per-tool errors (invalid params, 402 usage limits, upstream
+      failures) return inside the MCP tool result with isError:true rather than
+      as an HTTP failure.
+# tools/list was fetched ANONYMOUSLY (HTTP 200) on 2026-09-18 — the live tool
+# schemas are public. Raw capture saved verbatim at neuralverge-api-mcp-tools-list.json.
+probe:
+  method: tools/list
+  http_status: 200
+  fetched: '2026-09-18'
+  tool_count: 15
+  raw: neuralverge-api-mcp-tools-list.json
+tools:
+  - name: run_research
+    description: >-
+      Starts the full NeuralVerge AI research workflow (multi-step search,
+      analysis, structured reporting) and returns a session_id. Async.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-research
+  - name: get_session_status
+    description: Polls a session created by run_research until complete or failed.
+    source_operation: openapi/neuralverge-api-openapi.json#GET /functions/v1/get-session-status
+  - name: run_search
+    description: Runs a synchronous web search and returns ranked results.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-search
+  - name: run_extract
+    description: Loads a page by URL and extracts structured data per instructions/schema.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-extract
+  - name: run_linkedin_email
+    description: LinkedIn profile lookup by username, including email when available.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-linkedin-email
+  - name: run_linkedin_domain
+    description: Finds a LinkedIn profile from a company name/domain plus a full name.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-linkedin-domain
+  - name: run_linkedin_company_search
+    description: Searches LinkedIn companies by query with optional filters.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-linkedin-company-search
+  - name: run_linkedin_people_search
+    description: Searches LinkedIn people with free-text query and advanced filters.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-linkedin-people-search
+  - name: run_linkedin_company_employee
+    description: Searches employees of one or more given companies.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-linkedin-company-employee
+  - name: run_email_enrichment
+    description: Enriches a known email with profile data.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-email-enrichment
+  - name: run_email_validation
+    description: Validates deliverability of an email address.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-email-validation
+  - name: run_email_finder
+    description: Finds a professional email from a domain, first name, and last name.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-email-finder
+  - name: run_phone_enrichment
+    description: Enriches a known phone number, worldwide.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-phone-enrichment
+  - name: run_phone_enrichment_us
+    description: Validates and enriches a US phone number specifically.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-phone-enrichment-us
+  - name: run_crunchbase_company
+    description: Fetches structured company data from a Crunchbase organization URL.
+    source_operation: openapi/neuralverge-api-openapi.json#POST /functions/v1/run-crunchbase-company
+note: >-
+  The live tools/list returns 15 tools. The OpenAPI publishes 21 operations; the
+  6 not exposed as MCP tools are run-agent (AI Agents) and the 5 Amazon
+  marketplace operations (run-amazon-product-search, run-amazon-product,
+  run-amazon-product-offers, run-amazon-seller, run-amazon-seller-products) — a
+  real REST-only surface captured in the tool crosswalk rest_only[] block.

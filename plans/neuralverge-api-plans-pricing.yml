@@ -1,0 +1,60 @@
+generated: '2026-09-18'
+method: searched
+source: https://neuralverge.ai/pricing
+model: points
+model_note: >-
+  Simple, points-based pricing. Every plan includes a monthly points allowance;
+  points are spent on actions and AI tasks with no per-source pricing and no
+  separate contracts to add a data source. Points reset every billing cycle;
+  plans can be upgraded/downgraded at any time (new allowance applies next cycle).
+currency: USD
+billing_period: month
+plan_count: 6
+plans:
+  - name: Lite
+    price: 20
+    currency: USD
+    period: month
+    included_points: 20000
+  - name: Base
+    price: 50
+    currency: USD
+    period: month
+    included_points: 50000
+  - name: Core
+    price: 100
+    currency: USD
+    period: month
+    included_points: 100000
+    popular: true
+  - name: Pro
+    price: 250
+    currency: USD
+    period: month
+    included_points: 250000
+  - name: Ultima
+    price: 500
+    currency: USD
+    period: month
+    included_points: 500000
+  - name: Enterprise
+    price: 1000
+    currency: USD
+    period: month
+    included_points: 1000000
+action_costs:
+  - action: Search
+    points: 5
+    note: Highest-accuracy web search for AI agents.
+  - action: AI Extract
+    points: 5
+    note: LLM-friendly content extraction.
+  - action: AI Research
+    points: '20-400'
+    note: >-
+      Priced by task depth, not a flat rate. Lite 20 pts (30-90s), Base 50 pts
+      (1-2m), Core 100 pts (2-4m), Pro 200 pts (3-7m), Ultima 400 pts (5-12m).
+overage: null
+overage_note: >-
+  No published overage rate; the 402 Payment Required response indicates the
+  points allowance or subscription must be topped up / renewed to continue.

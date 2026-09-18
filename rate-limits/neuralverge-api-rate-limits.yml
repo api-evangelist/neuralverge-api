@@ -1,0 +1,47 @@
+generated: '2026-09-18'
+method: searched
+source: https://docs.neuralverge.ai/errors-and-rate-limits
+scope_model: per-organization
+scope_note: >-
+  Limits apply per organization, shared across every API key and user in the
+  org (not tracked per key). Higher org-wide limits can be configured on request.
+enforcement: queue
+enforcement_note: >-
+  Instead of rejecting on the instant a limit is hit, requests are queued (oldest
+  first, per endpoint) and started as capacity frees. A request only fails with
+  429 if still waiting after 60 seconds in the queue; a 429 therefore means the
+  request never ran and is always safe to retry.
+exhaustion_status: 429
+response_headers: []
+response_headers_note: No rate-limit response headers (X-RateLimit-*, RateLimit-*, Retry-After) are documented.
+limit_count: 5
+limits:
+  - scope: per-organization
+    dimension: concurrent-requests
+    limit: 50
+    window: null
+    applies_to: all endpoints
+  - scope: per-organization
+    dimension: requests-per-second
+    limit: 10
+    window: 1s
+    applies_to: all endpoints
+  - scope: per-endpoint-per-organization
+    dimension: requests-per-second
+    limit: 20
+    window: 1s
+    applies_to: default per endpoint
+  - scope: per-endpoint-per-organization
+    dimension: requests-per-second
+    limit: 10
+    window: 1s
+    applies_to: run-email-enrichment
+  - scope: per-endpoint-per-organization
+    dimension: requests-per-second
+    limit: 10
+    window: 1s
+    applies_to: [run-phone-enrichment, run-phone-enrichment-us]
+handling_429:
+  - Back off and retry (the queue timeout means the request never ran, so retry is safe)
+  - Use exponential backoff, not a tight retry loop
+  - Spread requests over time instead of bursting if you regularly hit the queue timeout

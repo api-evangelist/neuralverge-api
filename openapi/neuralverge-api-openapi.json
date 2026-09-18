@@ -1,0 +1,2131 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NeuralVerge API",
+    "version": "1.0.0",
+    "description": "NeuralVerge API for AI research workflows, search, extraction, and structured data source execution."
+  },
+  "servers": [
+    {
+      "url": "https://api.neuralverge.ai",
+      "description": "NeuralVerge API"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "API Key"
+      }
+    }
+  },
+  "security": [
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "AI Research",
+      "description": "Research workflows and session tracking."
+    },
+    {
+      "name": "AI Extract",
+      "description": "Schema-driven extraction workflows."
+    },
+    {
+      "name": "AI Agents",
+      "description": "Reusable saved agents executed through the API."
+    },
+    {
+      "name": "Search",
+      "description": "Fast, synchronous web search with no session or polling."
+    },
+    {
+      "name": "Data Sources",
+      "description": "Focused provider lookups for LinkedIn, email, phone, company, and Amazon data."
+    }
+  ],
+  "paths": {
+    "/functions/v1/run-research": {
+      "post": {
+        "tags": [
+          "AI Research"
+        ],
+        "summary": "Run Research",
+        "description": "Starts the full research workflow and returns a session id immediately.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "instructions",
+                  "settings"
+                ],
+                "properties": {
+                  "instructions": {
+                    "type": "string",
+                    "description": "Main research task."
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "country_code": {
+                        "type": "string"
+                      },
+                      "search_enabled": {
+                        "type": "boolean"
+                      },
+                      "deepsearch_model": {
+                        "type": "string"
+                      },
+                      "finalizer_model": {
+                        "type": "string"
+                      },
+                      "extract_schema_json": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "instructions": "Analyze the company and identify the main risks.",
+                "settings": {
+                  "country_code": "us",
+                  "search_enabled": true,
+                  "deepsearch_model": "base",
+                  "finalizer_model": "gemini-3.0-pro"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session started.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "11111111-1111-1111-1111-111111111111"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-agent": {
+      "post": {
+        "tags": [
+          "AI Agents"
+        ],
+        "summary": "Run Agent",
+        "description": "Runs a saved agent and returns a session id immediately.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "agentId",
+                  "instructions",
+                  "settings"
+                ],
+                "properties": {
+                  "agentId": {
+                    "type": "string",
+                    "format": "uuid"
+                  },
+                  "instructions": {
+                    "type": "string"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "country_code": {
+                        "type": "string"
+                      },
+                      "search_enabled": {
+                        "type": "boolean"
+                      },
+                      "deepsearch_model": {
+                        "type": "string"
+                      },
+                      "finalizer_model": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "agentId": "00000000-0000-0000-0000-000000000001",
+                "instructions": "Analyze the company, identify key risks, and prepare a concise report.",
+                "settings": {
+                  "country_code": "us",
+                  "search_enabled": true,
+                  "deepsearch_model": "base",
+                  "finalizer_model": "gemini-3.0-pro"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Session started.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "11111111-1111-1111-1111-111111111111"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/get-session-status": {
+      "get": {
+        "tags": [
+          "AI Research"
+        ],
+        "summary": "Get Session Status",
+        "description": "Returns the current status of a session and the final result when complete.",
+        "parameters": [
+          {
+            "name": "session_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid"
+            },
+            "description": "Session identifier."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session status.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "11111111-1111-1111-1111-111111111111",
+                  "status": "complete",
+                  "results": {
+                    "kind": "deepsearch",
+                    "human": "# Research summary\n\n- Main takeaway: Example risk is moderate.",
+                    "machine": {
+                      "summary": "Example risk is moderate.",
+                      "risk_level": "medium"
+                    },
+                    "total_points": 50
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-search": {
+      "post": {
+        "tags": [
+          "Search"
+        ],
+        "summary": "Run Search",
+        "description": "Runs a web search and returns a structured search payload.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "query",
+                  "settings"
+                ],
+                "properties": {
+                  "query": {
+                    "type": "string"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "country": {
+                        "type": "string"
+                      },
+                      "language": {
+                        "type": "string"
+                      },
+                      "max_results": {
+                        "type": "number"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "query": "OpenAI pricing",
+                "settings": {
+                  "country": "us",
+                  "language": "en",
+                  "max_results": 10
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "11111111-1111-1111-1111-111111111111",
+                  "kind": "search",
+                  "query": "OpenAI pricing",
+                  "results": [
+                    {
+                      "rank": 1,
+                      "title": "OpenAI Pricing",
+                      "url": "https://openai.com/pricing",
+                      "snippet": "Simple and flexible pricing."
+                    }
+                  ],
+                  "total_points": 5
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-extract": {
+      "post": {
+        "tags": [
+          "AI Extract"
+        ],
+        "summary": "Run Extract",
+        "description": "Loads a page by URL and extracts structured data.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url",
+                  "instructions",
+                  "settings"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  },
+                  "instructions": {
+                    "type": "string"
+                  },
+                  "settings": {
+                    "type": "object",
+                    "properties": {
+                      "country_code": {
+                        "type": "string"
+                      },
+                      "extract_schema_json": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              },
+              "example": {
+                "url": "https://example.com",
+                "instructions": "Collect company name and contact details.",
+                "settings": {
+                  "country_code": "us",
+                  "extract_schema_json": "{ \"type\": \"object\" }"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Extraction completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "11111111-1111-1111-1111-111111111111",
+                  "kind": "extract",
+                  "url": "https://example.com",
+                  "machine": {
+                    "company_name": "Example Inc.",
+                    "contact_email": "hello@example.com"
+                  },
+                  "total_points": 3
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-linkedin-email": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run LinkedIn Email",
+        "description": "Looks up a LinkedIn profile and returns contact details, including email when available.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "username"
+                ],
+                "properties": {
+                  "username": {
+                    "type": "string",
+                    "description": "Full LinkedIn profile URL."
+                  }
+                }
+              },
+              "example": {
+                "username": "https://www.linkedin.com/in/john-doe/"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lookup completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "11111111-1111-1111-1111-111111111111",
+                  "kind": "linkedin_email",
+                  "username": "https://www.linkedin.com/in/sam-altman/",
+                  "includeEmail": true,
+                  "human": "# LinkedIn people profile + Email\n\n- **Profile_url:** https://www.linkedin.com/in/sam-altman/\n- **Fullname:** Sam Altman\n- **Headline:** CEO at OpenAI\n- **Location:** San Francisco Bay Area\n- **About:** CEO of OpenAI and former president of Y Combinator.\n- **Email:** sam@openai.com",
+                  "machine": {
+                    "total_items": 1,
+                    "first_item": {
+                      "basic_info": {
+                        "fullname": "Sam Altman",
+                        "headline": "CEO at OpenAI",
+                        "profile_url": "https://www.linkedin.com/in/sam-altman/",
+                        "location": {
+                          "full": "San Francisco Bay Area"
+                        },
+                        "about": "CEO of OpenAI and former president of Y Combinator."
+                      },
+                      "email": "sam@openai.com"
+                    },
+                    "items": [
+                      {
+                        "basic_info": {
+                          "fullname": "Sam Altman",
+                          "headline": "CEO at OpenAI",
+                          "profile_url": "https://www.linkedin.com/in/sam-altman/"
+                        },
+                        "email": "sam@openai.com"
+                      }
+                    ]
+                  },
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-linkedin-domain": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run LinkedIn Domain",
+        "description": "Finds a LinkedIn profile by company name or domain and full name.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "company_or_domain",
+                  "full_name"
+                ],
+                "properties": {
+                  "company_or_domain": {
+                    "type": "string"
+                  },
+                  "full_name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "company_or_domain": "openai.com",
+                "full_name": "John Doe"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lookup completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "22222222-2222-2222-2222-222222222222",
+                  "kind": "linkedin_domain",
+                  "company_or_domain": "openai.com",
+                  "full_name": "Sam Altman",
+                  "human": "# LinkedIn profile by name and domain\n\n- **Company name / Domain:** openai.com\n- **Full name:** Sam Altman\n- **Matched name:** Sam Altman\n- **Profile URL:** https://www.linkedin.com/in/sam-altman/\n- **Headline:** CEO at OpenAI\n- **Company:** OpenAI\n- **Location:** San Francisco Bay Area\n- **Records returned:** 1\n\n## Summary\n\nCEO at OpenAI and former president of Y Combinator.",
+                  "machine": {
+                    "total_items": 1,
+                    "first_item": {
+                      "fullName": "Sam Altman",
+                      "profileUrl": "https://www.linkedin.com/in/sam-altman/",
+                      "headline": "CEO at OpenAI",
+                      "companyName": "OpenAI",
+                      "location": "San Francisco Bay Area",
+                      "summary": "CEO at OpenAI and former president of Y Combinator."
+                    }
+                  },
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-linkedin-company-search": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run LinkedIn Company Search",
+        "description": "Searches LinkedIn companies by query and optional filters.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "searchQuery"
+                ],
+                "properties": {
+                  "searchQuery": {
+                    "type": "string"
+                  },
+                  "companySize": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "industryIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "locations": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "maxItems": {
+                    "type": "number"
+                  },
+                  "scraperMode": {
+                    "type": "string"
+                  },
+                  "startPage": {
+                    "type": "number"
+                  }
+                }
+              },
+              "example": {
+                "searchQuery": "AI companies",
+                "companySize": [
+                  "51-200"
+                ],
+                "industryIds": [
+                  "Software"
+                ],
+                "locations": [
+                  "Amsterdam"
+                ],
+                "maxItems": 5,
+                "scraperMode": "short",
+                "startPage": 1
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "33333333-3333-3333-3333-333333333333",
+                  "kind": "linkedin_company_search",
+                  "companySize": [
+                    "51-200"
+                  ],
+                  "industryIds": [
+                    "Software Development"
+                  ],
+                  "locations": [
+                    "San Francisco Bay Area"
+                  ],
+                  "maxItems": 2,
+                  "scraperMode": "short",
+                  "searchQuery": "AI safety companies",
+                  "startPage": 1,
+                  "human": "# LinkedIn company search\n\n- **Results returned:** 2\n\n### OpenAI\n\n- **Profile URL:** https://www.linkedin.com/company/openai/\n- **Industry:** Research Services\n- **Location:** San Francisco Bay Area\n- **Followers:** 3200000\n- **Summary:** AI research and deployment company.\n\n### Anthropic\n\n- **Profile URL:** https://www.linkedin.com/company/anthropicresearch/\n- **Industry:** Software Development\n- **Location:** San Francisco, California\n- **Followers:** 450000\n- **Summary:** Building reliable, interpretable, and steerable AI systems.",
+                  "machine": {
+                    "total_items": 2,
+                    "first_item": {
+                      "name": "OpenAI",
+                      "url": "https://www.linkedin.com/company/openai/",
+                      "industry": "Research Services",
+                      "headquarters": "San Francisco Bay Area",
+                      "followers": "3200000",
+                      "description": "AI research and deployment company."
+                    },
+                    "items": [
+                      {
+                        "name": "OpenAI",
+                        "url": "https://www.linkedin.com/company/openai/",
+                        "industry": "Research Services"
+                      },
+                      {
+                        "name": "Anthropic",
+                        "url": "https://www.linkedin.com/company/anthropicresearch/",
+                        "industry": "Software Development"
+                      }
+                    ]
+                  },
+                  "points_per_company": 5,
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-linkedin-people-search": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run LinkedIn People Search",
+        "description": "Searches LinkedIn people using optional query terms and advanced filters.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "searchQuery": {
+                    "type": "string"
+                  },
+                  "maxResults": {
+                    "type": "number"
+                  },
+                  "startPage": {
+                    "type": "number"
+                  },
+                  "scraperMode": {
+                    "type": "string"
+                  },
+                  "locations": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "currentCompany": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pastCompany": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "currentJobTitleFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pastJobTitle": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "yearsOfExperienceFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "yearsAtCurrentCompanyFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "seniorityLevelFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "functionFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "industryIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "firstNames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "lastNames": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "companyHeadcountFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "searchQuery": "OpenAI recruiter",
+                "maxResults": 3,
+                "startPage": 2,
+                "scraperMode": "full",
+                "locations": [
+                  "Amsterdam"
+                ],
+                "currentCompany": [
+                  "OpenAI"
+                ],
+                "currentJobTitleFilter": [
+                  "Recruiter"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "44444444-4444-4444-4444-444444444444",
+                  "verification_type": "data_source",
+                  "kind": "linkedin_people_search",
+                  "scraperMode": "full",
+                  "autoQuerySegmentation": false,
+                  "maxItems": 3,
+                  "startPage": 2,
+                  "locations": [
+                    "Amsterdam"
+                  ],
+                  "profileScraperMode": "Full",
+                  "recentlyChangedJobs": false,
+                  "recentlyPostedOnLinkedIn": false,
+                  "searchQuery": "OpenAI recruiter",
+                  "currentCompanies": [
+                    "OpenAI"
+                  ],
+                  "currentJobTitles": [
+                    "Recruiter"
+                  ],
+                  "human": "# LinkedIn people search\n\n- **Results returned:** 3\n\n### Jane Doe\n\n- **Profile URL:** https://www.linkedin.com/in/jane-doe/\n- **First name:** Jane\n- **Last name:** Doe\n- **Title:** Recruiter\n- **Company:** OpenAI\n- **Location:** Amsterdam\n- **Summary:** Technical recruiting across research and engineering roles.",
+                  "machine": {
+                    "total_items": 3,
+                    "first_item": {
+                      "firstName": "Jane",
+                      "lastName": "Doe",
+                      "profileUrl": "https://www.linkedin.com/in/jane-doe/",
+                      "headline": "Recruiter at OpenAI",
+                      "currentCompany": "OpenAI",
+                      "location": "Amsterdam"
+                    },
+                    "items": [
+                      {
+                        "firstName": "Jane",
+                        "lastName": "Doe",
+                        "profileUrl": "https://www.linkedin.com/in/jane-doe/"
+                      }
+                    ]
+                  },
+                  "points_per_25_results": 100,
+                  "points_per_profile": 5,
+                  "total_points": 115
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-linkedin-company-employee": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run LinkedIn Company Employee",
+        "description": "Searches LinkedIn employees for one or more companies using people-style filters.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "companies"
+                ],
+                "properties": {
+                  "companies": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "searchQuery": {
+                    "type": "string"
+                  },
+                  "maxResults": {
+                    "type": "number"
+                  },
+                  "startPage": {
+                    "type": "number"
+                  },
+                  "scraperMode": {
+                    "type": "string"
+                  },
+                  "locations": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "currentJobTitleFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "pastJobTitle": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "yearsOfExperienceFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "yearsAtCurrentCompanyFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "seniorityLevelFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "functionFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "industryIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "companyHeadcountFilter": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                }
+              },
+              "example": {
+                "companies": [
+                  "https://www.linkedin.com/company/openai/"
+                ],
+                "searchQuery": "Recruiter",
+                "maxResults": 3,
+                "startPage": 2,
+                "scraperMode": "full",
+                "locations": [
+                  "Amsterdam"
+                ],
+                "currentJobTitleFilter": [
+                  "Recruiter"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "55555555-5555-5555-5555-555555555555",
+                  "verification_type": "data_source",
+                  "kind": "linkedin_company_employee",
+                  "companies": [
+                    "https://www.linkedin.com/company/openai/"
+                  ],
+                  "searchQuery": "Recruiter",
+                  "maxResults": 3,
+                  "startPage": 2,
+                  "scraperMode": "full",
+                  "locations": [
+                    "Amsterdam"
+                  ],
+                  "currentJobTitleFilter": [
+                    "Recruiter"
+                  ],
+                  "pastJobTitle": [],
+                  "yearsOfExperienceFilter": [],
+                  "yearsAtCurrentCompanyFilter": [],
+                  "seniorityLevelFilter": [],
+                  "functionFilter": [],
+                  "industryIds": [],
+                  "companyHeadcountFilter": [],
+                  "human": "# LinkedIn company employees\n\n**Companies:** https://www.linkedin.com/company/openai/\n- **Results returned:** 3\n\n### Jane Doe\n\n- **Profile URL:** https://www.linkedin.com/in/jane-doe/\n- **First name:** Jane\n- **Last name:** Doe\n- **Title:** Recruiter\n- **Company:** OpenAI\n- **Location:** Amsterdam\n- **Summary:** Technical recruiting across research and engineering roles.",
+                  "machine": {
+                    "total_items": 3,
+                    "first_item": {
+                      "firstName": "Jane",
+                      "lastName": "Doe",
+                      "profileUrl": "https://www.linkedin.com/in/jane-doe/",
+                      "title": "Recruiter",
+                      "company": "OpenAI",
+                      "location": "Amsterdam"
+                    },
+                    "items": [
+                      {
+                        "firstName": "Jane",
+                        "lastName": "Doe",
+                        "profileUrl": "https://www.linkedin.com/in/jane-doe/"
+                      }
+                    ]
+                  },
+                  "points_per_run": 30,
+                  "points_per_profile": 10,
+                  "total_points": 60
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-email-enrichment": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Email Enrichment",
+        "description": "Enriches a known email address with profile-related data when available.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              },
+              "example": {
+                "email": "john@example.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enrichment completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "66666666-6666-6666-6666-666666666666",
+                  "kind": "email_enrichment",
+                  "email": "sam@openai.com",
+                  "human": "# Email enrichment\n\n- **Input Email:** sam@openai.com\n- **Full names:** Sam Altman\n- **Emails:** sam@openai.com\n- **Phones:** +14155550123\n- **Company:** OpenAI\n- **LinkedIn:** https://www.linkedin.com/in/sam-altman/",
+                  "machine": {
+                    "full_names": [
+                      "Sam Altman"
+                    ],
+                    "gender": "male",
+                    "date_of_birth": null,
+                    "emails": [
+                      "sam@openai.com"
+                    ],
+                    "phones": [
+                      "+14155550123"
+                    ],
+                    "locations": [
+                      {
+                        "country": "US",
+                        "state": "California",
+                        "city": "San Francisco"
+                      }
+                    ],
+                    "company": "OpenAI",
+                    "position": "CEO",
+                    "linkedin_profile": "https://www.linkedin.com/in/sam-altman/",
+                    "linkedin": {
+                      "companyName": "OpenAI",
+                      "title": "CEO",
+                      "profileUrl": "https://www.linkedin.com/in/sam-altman/"
+                    },
+                    "x_profile": "https://x.com/sama",
+                    "telegram_username": null
+                  },
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-email-validation": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Email Validation",
+        "description": "Validates an email address and returns deliverability signals.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email"
+                  }
+                }
+              },
+              "example": {
+                "email": "john@example.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validation completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "77777777-7777-7777-7777-777777777777",
+                  "kind": "email_validation",
+                  "email": "sam@openai.com",
+                  "human": "# Email validation\n\n- **Email:** sam@openai.com\n- **Result:** valid\n- **Message:** Mailbox exists and accepts mail.\n- **Catch-all:** No\n- **Provider:** google_workspace\n- **Confidence:** high",
+                  "machine": {
+                    "email": "sam@openai.com",
+                    "result": "valid",
+                    "message": "Mailbox exists and accepts mail.",
+                    "isCatchAll": false,
+                    "provider": "google_workspace",
+                    "confidence": "high"
+                  },
+                  "total_points": 1
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-email-finder": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Email Finder",
+        "description": "Finds a professional email address using company domain, first name, and last name.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "domain",
+                  "first_name",
+                  "last_name"
+                ],
+                "properties": {
+                  "domain": {
+                    "type": "string"
+                  },
+                  "first_name": {
+                    "type": "string"
+                  },
+                  "last_name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "domain": "openai.com",
+                "first_name": "John",
+                "last_name": "Doe"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email finder completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "88888888-8888-8888-8888-888888888888",
+                  "kind": "email_finder",
+                  "domain": "openai.com",
+                  "full_name": "Sam Altman",
+                  "first_name": "Sam",
+                  "last_name": "Altman",
+                  "email": "sam@openai.com",
+                  "human": "# Email finder\n\n- **First Name:** Sam\n- **Last Name:** Altman\n- **Company Domain:** openai.com\n- **Found:** Yes\n- **Email:** sam@openai.com\n- **Confidence:** high\n- **Provider:** enrich.so",
+                  "machine": {
+                    "firstName": "Sam",
+                    "lastName": "Altman",
+                    "domain": "openai.com",
+                    "found": true,
+                    "email": "sam@openai.com",
+                    "confidence": "high",
+                    "provider": "enrich.so",
+                    "message": null
+                  },
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-phone-enrichment": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Phone Enrichment",
+        "description": "Enriches a known phone number with profile data when available.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "phone"
+                ],
+                "properties": {
+                  "phone": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "phone": "+1234567890"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Enrichment completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "99999999-9999-9999-9999-999999999999",
+                  "kind": "phone_enrichment",
+                  "phone": "+14155550123",
+                  "human": "# Phone enrichment\n\n- **Input Phone:** +14155550123\n- **Full names:** Sam Altman\n- **Emails:** sam@openai.com\n- **Phones:** +14155550123\n- **Company:** OpenAI\n- **Operator:** Verizon",
+                  "machine": {
+                    "full_names": [
+                      "Sam Altman"
+                    ],
+                    "gender": "male",
+                    "date_of_birth": null,
+                    "emails": [
+                      "sam@openai.com"
+                    ],
+                    "phones": [
+                      "+14155550123"
+                    ],
+                    "addresses": [
+                      {
+                        "country": "US",
+                        "state": "California",
+                        "city": "San Francisco"
+                      }
+                    ],
+                    "company": "OpenAI",
+                    "linkedin_profile": "https://www.linkedin.com/in/sam-altman/",
+                    "x_profile": "https://x.com/sama",
+                    "telegram_username": null,
+                    "operator": "Verizon"
+                  },
+                  "total_points": 20
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-phone-enrichment-us": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Phone Enrichment US",
+        "description": "Validates and enriches a US phone number with carrier and activity details.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "phone"
+                ],
+                "properties": {
+                  "phone": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "phone": "12069735100"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Validation completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+                  "kind": "phone_enrichment_us",
+                  "phone": "12069735100",
+                  "human": "# Phone enrichment US\n\n- **Input Phone:** 12069735100\n- **Resolved Phone:** 12069735100\n- **Valid:** Yes\n- **Activity Score:** 87\n- **Line Type:** mobile\n- **Carrier:** Verizon Wireless\n- **Prepaid:** No\n- **Country:** United States (US) +1\n- **Litigator Risk:** No\n\n## Owners\n\n### Owner 1\n- **Name:** Sam Altman\n- **Type:** person\n- **Current Addresses:**\n  - San Francisco, California, US",
+                  "machine": {
+                    "id": "tr_phone_01HZX1234567890",
+                    "phone_number": "12069735100",
+                    "is_valid": true,
+                    "activity_score": 87,
+                    "country_calling_code": "1",
+                    "country_code": "US",
+                    "country_name": "United States",
+                    "line_type": "mobile",
+                    "carrier": "Verizon Wireless",
+                    "is_prepaid": false,
+                    "is_litigator_risk": false,
+                    "owners": [
+                      {
+                        "id": "owner_123",
+                        "name": "Sam Altman",
+                        "firstname": "Sam",
+                        "middlename": null,
+                        "lastname": "Altman",
+                        "alternate_names": [],
+                        "age_range": null,
+                        "gender": null,
+                        "type": "person",
+                        "link_to_phone_start_date": null,
+                        "industry": [],
+                        "current_addresses": [
+                          {
+                            "id": "addr_123",
+                            "location_type": "current",
+                            "street_line_1": null,
+                            "street_line_2": null,
+                            "city": "San Francisco",
+                            "postal_code": null,
+                            "zip4": null,
+                            "state_code": "CA",
+                            "country_code": "US",
+                            "delivery_point": null,
+                            "link_to_person_start_date": null
+                          }
+                        ]
+                      }
+                    ],
+                    "warnings": [],
+                    "error": null
+                  },
+                  "total_points": 100
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-crunchbase-company": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Crunchbase Company",
+        "description": "Fetches structured company data from a Crunchbase company URL.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "url"
+                ],
+                "properties": {
+                  "url": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "url": "https://www.crunchbase.com/organization/openai"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lookup completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+                  "kind": "crunchbase_company",
+                  "url": "https://www.crunchbase.com/organization/openai",
+                  "human": "# Crunchbase company\n\n- **Crunchbase URL:** https://www.crunchbase.com/organization/openai\n- **Company:** OpenAI\n- **Website:** https://openai.com\n- **Location:** San Francisco, California, United States\n- **Founded:** 2015\n- **Employees:** 1001-5000\n- **Industries:** Artificial Intelligence, Machine Learning\n- **Funding:** $11.3B\n- **Records returned:** 1\n\n## Summary\n\nAI research and deployment company.",
+                  "machine": {
+                    "total_items": 1,
+                    "first_item": {
+                      "name": "OpenAI",
+                      "website": "https://openai.com",
+                      "location": "San Francisco, California, United States",
+                      "founded": "2015",
+                      "employees": "1001-5000",
+                      "industries": [
+                        "Artificial Intelligence",
+                        "Machine Learning"
+                      ],
+                      "totalFunding": "$11.3B",
+                      "description": "AI research and deployment company."
+                    },
+                    "items": [
+                      {
+                        "name": "OpenAI",
+                        "website": "https://openai.com"
+                      }
+                    ]
+                  },
+                  "total_points": 15
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-amazon-product-search": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Amazon Product Search",
+        "description": "Searches Amazon products by keyword and returns product listings across paginated results. \"short\" scraper_mode (default) returns search-result card fields only, at 5 points/product. \"full\" additionally re-fetches each result's own product page for the complete record (same shape as Run Amazon Product), at 10 points/product.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "query"
+                ],
+                "properties": {
+                  "query": {
+                    "type": "string"
+                  },
+                  "max_items": {
+                    "type": "number"
+                  },
+                  "start_page": {
+                    "type": "number"
+                  },
+                  "scraper_mode": {
+                    "type": "string",
+                    "enum": [
+                      "short",
+                      "full"
+                    ],
+                    "default": "short"
+                  },
+                  "domain": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "query": "wireless mouse",
+                "max_items": 2,
+                "start_page": 1,
+                "scraper_mode": "short",
+                "domain": "amazon.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+                  "kind": "amazon_product_search",
+                  "query": "wireless mouse",
+                  "domain": "amazon.com",
+                  "max_items": 2,
+                  "start_page": 1,
+                  "scraper_mode": "short",
+                  "human": "# Amazon product search\n\n- **Search term:** wireless mouse\n- **Domain:** amazon.com\n- **Starting page:** 1\n- **Max items:** 2\n- **Scraping mode:** short\n- **Records returned:** 2\n- **Proxy traffic:** 3.24 MB",
+                  "machine": {
+                    "total_items": 2,
+                    "first_item": {
+                      "id": "B004YAVF8I",
+                      "title": "Logitech M185 Compact Ambidextrous 2.4 GHz Wireless Mouse - Swift Grey",
+                      "url": "https://www.amazon.com/dp/B004YAVF8I",
+                      "price": "$13.97",
+                      "rating": 4.4,
+                      "review_count": 44844,
+                      "image": "https://m.media-amazon.com/images/I/51WN5aXZWIL._AC_UY218_.jpg"
+                    },
+                    "items": [
+                      {
+                        "id": "B004YAVF8I",
+                        "title": "Logitech M185 Compact Ambidextrous 2.4 GHz Wireless Mouse - Swift Grey",
+                        "url": "https://www.amazon.com/dp/B004YAVF8I",
+                        "price": "$13.97",
+                        "rating": 4.4,
+                        "review_count": 44844,
+                        "image": "https://m.media-amazon.com/images/I/51WN5aXZWIL._AC_UY218_.jpg"
+                      },
+                      {
+                        "id": "B07CMS5Q6P",
+                        "title": "Logitech G305 Lightspeed Wireless Gaming Mouse - Black",
+                        "url": "https://www.amazon.com/dp/B07CMS5Q6P",
+                        "price": "$29.99",
+                        "rating": 4.6,
+                        "review_count": 39848,
+                        "image": "https://m.media-amazon.com/images/I/51sg9BLSMTL._AC_UY218_.jpg"
+                      }
+                    ],
+                    "proxy_traffic_bytes": 3397039
+                  },
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-amazon-product": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Amazon Product",
+        "description": "Fetches full Amazon product details by ASIN: title, brand, price, images, rating, features, and seller.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "asin"
+                ],
+                "properties": {
+                  "asin": {
+                    "type": "string"
+                  },
+                  "domain": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "asin": "B004YAVF8I",
+                "domain": "amazon.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lookup completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+                  "kind": "amazon_product",
+                  "asin": "B004YAVF8I",
+                  "domain": "amazon.com",
+                  "human": "# Amazon product\n\n- **ASIN:** B004YAVF8I\n- **Domain:** amazon.com\n- **Proxy traffic:** 1.80 MB\n- **Title:** Logitech M185 Compact Ambidextrous 2.4 GHz Wireless Mouse - Swift Grey\n- **Brand:** Logitech\n- **Price:** $13.97\n- **Rating:** 4.4 (44844 reviews)\n- **Availability:** In Stock",
+                  "machine": {
+                    "product": {
+                      "id": "B004YAVF8I",
+                      "title": "Logitech M185 Compact Ambidextrous 2.4 GHz Wireless Mouse - Swift Grey",
+                      "brand": "Logitech",
+                      "byline": "Visit the Logitech Store",
+                      "price": 13.97,
+                      "currency": "$",
+                      "list_price": 17.99,
+                      "image": "https://m.media-amazon.com/images/I/51WN5aXZWIL._AC_UY218_.jpg",
+                      "images": [
+                        "https://m.media-amazon.com/images/I/51WN5aXZWIL._AC_UY218_.jpg"
+                      ],
+                      "rating": 4.4,
+                      "review_count": 44844,
+                      "availability": "In Stock",
+                      "is_in_stock": true,
+                      "features": [
+                        "Ambidextrous mouse with 2.4 GHz USB-A Nano Receiver",
+                        "12-Months Battery Life"
+                      ],
+                      "details": {
+                        "Brand": "Logitech",
+                        "Connectivity Technology": "Wireless"
+                      },
+                      "breadcrumbs": [
+                        "Electronics",
+                        "Computers & Accessories",
+                        "Mice"
+                      ],
+                      "category": "Mice",
+                      "seller": {
+                        "id": null,
+                        "name": "Amazon.com"
+                      },
+                      "ships_from": "Amazon.com",
+                      "sold_by": "Amazon.com",
+                      "variations": []
+                    },
+                    "proxy_traffic_bytes": 1887432
+                  },
+                  "total_points": 5
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-amazon-product-offers": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Amazon Product Offers",
+        "description": "Fetches all marketplace offers for an Amazon product by ASIN: price, condition, seller, and delivery.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "asin"
+                ],
+                "properties": {
+                  "asin": {
+                    "type": "string"
+                  },
+                  "domain": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "asin": "B004YAVF8I",
+                "domain": "amazon.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lookup completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+                  "kind": "amazon_product_offers",
+                  "asin": "B004YAVF8I",
+                  "domain": "amazon.com",
+                  "human": "# Amazon product offers\n\n- **ASIN:** B004YAVF8I\n- **Domain:** amazon.com\n- **Offers returned:** 2\n- **Proxy traffic:** 3.31 MB",
+                  "machine": {
+                    "total_items": 2,
+                    "offers": [
+                      {
+                        "asin": "B004YAVF8I",
+                        "price": 13.97,
+                        "currency": "$",
+                        "savings_percent": 22,
+                        "condition": "New",
+                        "condition_note": null,
+                        "ships_from": "Amazon.com",
+                        "sold_by": "Amazon.com",
+                        "is_prime": true,
+                        "delivery": "FREE delivery Thursday, September 10",
+                        "seller": {
+                          "id": null,
+                          "name": "Amazon.com",
+                          "rating": null,
+                          "rating_count": null,
+                          "positive_percent": null
+                        }
+                      },
+                      {
+                        "asin": "B004YAVF8I",
+                        "price": 8.94,
+                        "currency": "$",
+                        "savings_percent": null,
+                        "condition": "Used - Acceptable",
+                        "condition_note": null,
+                        "ships_from": "Amazon.com",
+                        "sold_by": "Amazon Resale",
+                        "is_prime": false,
+                        "delivery": "FREE delivery Thursday, September 10",
+                        "seller": {
+                          "id": null,
+                          "name": "Amazon Resale",
+                          "rating": null,
+                          "rating_count": null,
+                          "positive_percent": null
+                        }
+                      }
+                    ],
+                    "proxy_traffic_bytes": 3466210
+                  },
+                  "total_points": 5
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-amazon-seller": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Amazon Seller",
+        "description": "Fetches an Amazon seller profile by seller ID: name, rating, business details, and contact info.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "seller"
+                ],
+                "properties": {
+                  "seller": {
+                    "type": "string"
+                  },
+                  "domain": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "seller": "A2L77EE7U53NWQ",
+                "domain": "amazon.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lookup completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "ffffffff-ffff-ffff-ffff-ffffffffffff",
+                  "kind": "amazon_seller",
+                  "seller": "A2L77EE7U53NWQ",
+                  "domain": "amazon.com",
+                  "human": "# Amazon seller\n\n- **Seller ID:** A2L77EE7U53NWQ\n- **Domain:** amazon.com\n- **Proxy traffic:** 1.10 MB\n- **Name:** Example Seller Co\n- **Rating:** 96% (2130 ratings)\n- **Business name:** Example Seller Co LLC\n- **Business address:** 123 Main St, Seattle, WA\n- **Phone:** +1 555-0100",
+                  "machine": {
+                    "seller": {
+                      "id": "A2L77EE7U53NWQ",
+                      "name": "Example Seller Co",
+                      "rating": 96,
+                      "rating_count": 2130,
+                      "positive_percent": 96,
+                      "about": "Authorized reseller of electronics and accessories.",
+                      "business_name": "Example Seller Co LLC",
+                      "business_address": "123 Main St, Seattle, WA",
+                      "phone": "+1 555-0100",
+                      "privacy_policy": "https://www.amazon.com/gp/help/customer/display.html?nodeId=468496",
+                      "rating_30d": {
+                        "rating": 97,
+                        "rating_count": 84
+                      },
+                      "rating_90d": {
+                        "rating": 96,
+                        "rating_count": 310
+                      },
+                      "rating_365d": {
+                        "rating": 96,
+                        "rating_count": 1240
+                      },
+                      "rating_lifetime": {
+                        "rating": 96,
+                        "rating_count": 2130
+                      }
+                    },
+                    "proxy_traffic_bytes": 1149203
+                  },
+                  "total_points": 5
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    },
+    "/functions/v1/run-amazon-seller-products": {
+      "post": {
+        "tags": [
+          "Data Sources"
+        ],
+        "summary": "Run Amazon Seller Products",
+        "description": "Lists products sold by an Amazon seller's storefront: title, URL, price, rating, and image.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "seller"
+                ],
+                "properties": {
+                  "seller": {
+                    "type": "string"
+                  },
+                  "max_items": {
+                    "type": "number"
+                  },
+                  "start_page": {
+                    "type": "number"
+                  },
+                  "domain": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "seller": "A2L77EE7U53NWQ",
+                "max_items": 2,
+                "start_page": 1,
+                "domain": "amazon.com"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search completed.",
+            "content": {
+              "application/json": {
+                "example": {
+                  "session_id": "01010101-0101-0101-0101-010101010101",
+                  "kind": "amazon_seller_products",
+                  "seller": "A2L77EE7U53NWQ",
+                  "domain": "amazon.com",
+                  "max_items": 2,
+                  "start_page": 1,
+                  "human": "# Amazon seller products\n\n- **Seller ID:** A2L77EE7U53NWQ\n- **Domain:** amazon.com\n- **Starting page:** 1\n- **Max items:** 2\n- **Records returned:** 2\n- **Proxy traffic:** 2.74 MB",
+                  "machine": {
+                    "total_items": 2,
+                    "items": [
+                      {
+                        "id": "B004YAVF8I",
+                        "url": "https://www.amazon.com/dp/B004YAVF8I",
+                        "price": 13.97,
+                        "currency": "$",
+                        "list_price": 17.99,
+                        "rating": 4.4,
+                        "review_count": 44844,
+                        "image": "https://m.media-amazon.com/images/I/51WN5aXZWIL._AC_UY218_.jpg",
+                        "is_sponsored": false,
+                        "is_prime": true
+                      },
+                      {
+                        "id": "B07CMS5Q6P",
+                        "url": "https://www.amazon.com/dp/B07CMS5Q6P",
+                        "price": 29.99,
+                        "currency": "$",
+                        "list_price": null,
+                        "rating": 4.6,
+                        "review_count": 39848,
+                        "image": "https://m.media-amazon.com/images/I/51sg9BLSMTL._AC_UY218_.jpg",
+                        "is_sponsored": false,
+                        "is_prime": true
+                      }
+                    ],
+                    "proxy_traffic_bytes": 2872110
+                  },
+                  "total_points": 10
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "402": {
+            "description": "Payment Required"
+          },
+          "500": {
+            "description": "Internal Error"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+generated: '2026-09-18'
+method: searched
+source: >-
+  https://docs.neuralverge.ai (API reference + errors-and-rate-limits),
+  openapi/neuralverge-api-openapi.json; status host probe 2026-09-18.
+versioning:
+  scheme: uri-path
+  current: v1
+  spec_version: 1.0.0
+  note: Capabilities served under /functions/v1/; OpenAPI info.version 1.0.0.
+deprecation:
+  policy_url: null
+  sunset_header: null
+  note: No published deprecation policy or RFC 8594 Sunset/Deprecation header support found.
+sla:
+  url: null
+  uptime_target: null
+  note: No published SLA / uptime commitment found.
+status_page:
+  url: null
+  note: >-
+    status.neuralverge.ai does not resolve (probed 2026-09-18, no connection). No
+    status/incident page found. No StatusPage pointer emitted.
+changelog:
+  url: null
+  note: docs.neuralverge.ai/changelog 404s; no dated changelog published.
+deprecated_operations: []

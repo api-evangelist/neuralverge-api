@@ -1,0 +1,54 @@
+generated: '2026-09-18'
+method: derived
+source: >-
+  Derived from the OpenAPI 4xx/5xx responses (openapi/neuralverge-api-openapi.json,
+  every operation declares 400/401/402/404/500) and enriched from the docs error
+  reference at https://docs.neuralverge.ai/errors-and-rate-limits (adds 429).
+format: custom-json
+envelope:
+  shape: '{"error": "<message string>"}'
+  note: >-
+    NOT RFC 9457 problem+json. A flat JSON object with a single "error" string;
+    the exact payload can vary by endpoint. Content-Type application/json.
+problems:
+  - status: 400
+    title: Bad Request
+    meaning: The request body or parameters are invalid.
+    causes: [missing required fields, invalid JSON, invalid UUID/URL/email/phone format, unsupported option values]
+    retryable: false
+  - status: 401
+    title: Unauthorized
+    meaning: Authentication failed.
+    causes: [missing Authorization header, invalid bearer token format, expired or invalid token, token lacks access]
+    retryable: false
+  - status: 402
+    title: Payment Required
+    meaning: The operation cannot proceed because of plan or usage limits.
+    causes: [points limit exceeded, inactive subscription, expired subscription]
+    retryable: false
+  - status: 404
+    title: Not Found
+    meaning: The requested resource does not exist or is not available to the current user.
+    causes: [invalid session_id, missing agent, inaccessible resource]
+    retryable: false
+  - status: 429
+    title: Too Many Requests
+    meaning: >-
+      The request was queued but could not be started within the 60s queue
+      timeout. Requests are queued (oldest first, per endpoint) rather than
+      rejected immediately, so a 429 always means the request never ran and is
+      safe to retry.
+    causes: [org requests-per-second limit saturated, org concurrent limit saturated, per-endpoint rate limit saturated]
+    retryable: true
+    guidance: Retry with exponential backoff; spread requests over time.
+    source: docs (not declared in OpenAPI responses)
+  - status: 500
+    title: Internal Error
+    meaning: An internal processing error occurred.
+    causes: [upstream provider issues, temporary service failure, unexpected backend processing error]
+    retryable: true
+    guidance: Retry intermittent 500s.
+mcp_note: >-
+  Over MCP, once a request is authenticated, per-tool errors (invalid params, 402
+  usage limits, upstream failures) are returned inside the tool result with
+  isError:true rather than as an HTTP failure, so the calling model can react.

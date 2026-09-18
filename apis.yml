@@ -5,6 +5,7 @@ description: >-
   Extract, reusable AI Agents workflows, synchronous Search, and 29 data sources spanning company intelligence,
   corporate registries, contact enrichment, email/phone lookup, and LinkedIn data.
 url: https://raw.githubusercontent.com/api-evangelist/neuralverge-api/refs/heads/main/apis.yml
+image: https://neuralverge.ai/opengraph-image
 created: '2026-09-18'
 modified: '2026-09-18'
 specificationVersion: '0.21'
@@ -31,6 +32,7 @@ apis:
       /functions/v1/run-search).
     humanURL: https://neuralverge.ai/documentation/api
     baseURL: https://api.neuralverge.ai
+    image: https://neuralverge.ai/opengraph-image
     tags:
       - company data
       - people data
@@ -48,16 +50,74 @@ apis:
       - AI agents
     properties:
       - type: OpenAPI
+        url: openapi/neuralverge-api-openapi.json
+      - type: OpenAPI
+        name: OpenAPI (provider-hosted)
         url: https://docs.neuralverge.ai/openapi.json
       - type: LLMsTxt
+        url: llms/neuralverge-api-llms.txt
+      - type: LLMsTxt
+        name: llms.txt (provider-hosted)
         url: https://docs.neuralverge.ai/llms.txt
       - type: Documentation
         url: https://docs.neuralverge.ai
+      - type: APIReference
+        url: https://docs.neuralverge.ai/api-reference/ai-research/run-research
+      - type: MCPServer
+        url: mcp/neuralverge-api-mcp.yml
 maintainers:
   - FN: NeuralVerge Inc.
     url: https://neuralverge.ai
-generated:
+x-generated:
   by: apis.io/add
   model: claude-opus-4-8
   confidence: 95
   at: '2026-09-18T12:25:08.895Z'
+common:
+- type: Website
+  url: https://neuralverge.ai/
+- type: DeveloperPortal
+  url: https://neuralverge.ai/documentation/api
+- type: Blog
+  url: https://neuralverge.ai/blog
+- type: Pricing
+  url: https://neuralverge.ai/pricing
+- type: SignUp
+  url: https://app.neuralverge.ai
+- type: TermsOfService
+  url: https://neuralverge.ai/terms
+- type: PrivacyPolicy
+  url: https://neuralverge.ai/privacy-center
+- type: AgentCard
+  url: a2a/neuralverge-api-a2a.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: AgenticAccess
+  url: agentic-access/neuralverge-api-agentic-access.yml
+- type: Conventions
+  url: conventions/neuralverge-api-conventions.yml
+- type: ErrorCatalog
+  url: errors/neuralverge-api-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/neuralverge-api-lifecycle.yml
+- type: Conformance
+  url: conformance/neuralverge-api-conformance.yml
+- type: DataModel
+  url: data-model/neuralverge-api-data-model.yml
+- type: Overlay
+  url: overlays/neuralverge-api-openapi-overlay.yaml
+- type: RateLimits
+  url: rate-limits/neuralverge-api-rate-limits.yml
+- type: Plans
+  url: plans/neuralverge-api-plans-pricing.yml
+- type: DomainSecurity
+  url: security/neuralverge-api-domain-security.yml
+- type: Authentication
+  url: authentication/neuralverge-api-authentication.yml
+- type: ToolCrosswalk
+  url: mcp/neuralverge-api-tool-crosswalk.yml
+x-enrichment:
+  date: '2026-09-18'
+  status: enriched
+  artifacts_added: 22
+  pass: local-v3

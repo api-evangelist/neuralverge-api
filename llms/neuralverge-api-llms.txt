@@ -1,0 +1,36 @@
+# NeuralVerge
+
+- [Introduction](https://docs.neuralverge.ai/index.md): NeuralVerge is an API-first platform for AI research, extraction, reusable agents, and premium data source execution.
+- [AI Research](https://docs.neuralverge.ai/ai-research.md): Multi-step research workflows that search, analyze sources, and return structured answers.
+- [AI Extract](https://docs.neuralverge.ai/ai-extract.md): Schema-driven extraction for turning webpages and source content into structured data.
+- [AI Agents](https://docs.neuralverge.ai/ai-agents.md): Reusable workflows that package instructions and settings into repeatable runs.
+- [Search](https://docs.neuralverge.ai/search.md): A fast, synchronous web search endpoint that returns ranked results without a research workflow.
+- [Data Sources](https://docs.neuralverge.ai/data-sources.md): Focused provider endpoints for LinkedIn, email, phone, company, and marketplace (Amazon, eBay, Walmart, Best Buy, AliExpress) data lookups.
+- [Authentication](https://docs.neuralverge.ai/authentication.md): How to authenticate requests to the NeuralVerge API.
+- [Errors & Rate Limits](https://docs.neuralverge.ai/errors-and-rate-limits.md): Error handling, common response codes, retry guidance, and polling recommendations.
+- [MCP Server](https://docs.neuralverge.ai/mcp-server.md): Connect any MCP-compatible client (Claude, ChatGPT, Cursor) to the full NeuralVerge API over the Model Context Protocol.
+- [Run Research](https://docs.neuralverge.ai/api-reference/ai-research/run-research.md): Starts the full research workflow and returns a session id immediately.
+- [Get Session Status](https://docs.neuralverge.ai/api-reference/ai-research/get-session-status.md): Returns the current status of a session and the final result when complete.
+- [Run Agent](https://docs.neuralverge.ai/api-reference/ai-agents/run-agent.md): Runs a saved agent and returns a session id immediately.
+- [Run Search](https://docs.neuralverge.ai/api-reference/search/run-search.md): Runs a web search and returns a structured search payload.
+- [Run Extract](https://docs.neuralverge.ai/api-reference/ai-extract/run-extract.md): Loads a page by URL and extracts structured data.
+- [Run LinkedIn Email](https://docs.neuralverge.ai/api-reference/data-sources/run-linkedin-email.md): Looks up a LinkedIn profile and returns contact details, including email when available.
+- [Run LinkedIn Domain](https://docs.neuralverge.ai/api-reference/data-sources/run-linkedin-domain.md): Finds a LinkedIn profile by company name or domain and full name.
+- [Run LinkedIn Company Search](https://docs.neuralverge.ai/api-reference/data-sources/run-linkedin-company-search.md): Searches LinkedIn companies by query and optional filters.
+- [Run LinkedIn People Search](https://docs.neuralverge.ai/api-reference/data-sources/run-linkedin-people-search.md): Searches LinkedIn people using optional query terms and advanced filters.
+- [Run LinkedIn Company Employee](https://docs.neuralverge.ai/api-reference/data-sources/run-linkedin-company-employee.md): Searches LinkedIn employees for one or more companies using people-style filters.
+- [Run Email Enrichment](https://docs.neuralverge.ai/api-reference/data-sources/run-email-enrichment.md): Enriches a known email address with profile-related data when available.
+- [Run Email Validation](https://docs.neuralverge.ai/api-reference/data-sources/run-email-validation.md): Validates an email address and returns deliverability signals.
+- [Run Email Finder](https://docs.neuralverge.ai/api-reference/data-sources/run-email-finder.md): Finds a professional email address using company domain, first name, and last name.
+- [Run Phone Enrichment](https://docs.neuralverge.ai/api-reference/data-sources/run-phone-enrichment.md): Enriches a known phone number with profile data when available.
+- [Run Phone Enrichment US](https://docs.neuralverge.ai/api-reference/data-sources/run-phone-enrichment-us.md): Validates and enriches a US phone number with carrier and activity details.
+- [Run Crunchbase Company](https://docs.neuralverge.ai/api-reference/data-sources/run-crunchbase-company.md): Fetches structured company data from a Crunchbase company URL.
+- [Run Amazon Product Search](https://docs.neuralverge.ai/api-reference/data-sources/run-amazon-product-search.md): Searches Amazon products by keyword and returns product listings across paginated results. "short" scraper_mode (default) returns search-result card fields only, at 5 points/product. "full" additionally re-fetches each result's own product page for the complete record (same shape as Run Amazon Produ…
+- [Run Amazon Product](https://docs.neuralverge.ai/api-reference/data-sources/run-amazon-product.md): Fetches full Amazon product details by ASIN: title, brand, price, images, rating, features, and seller.
+- [Run Amazon Product Offers](https://docs.neuralverge.ai/api-reference/data-sources/run-amazon-product-offers.md): Fetches all marketplace offers for an Amazon product by ASIN: price, condition, seller, and delivery.
+- [Run Amazon Seller](https://docs.neuralverge.ai/api-reference/data-sources/run-amazon-seller.md): Fetches an Amazon seller profile by seller ID: name, rating, business details, and contact info.
+- [Run Amazon Seller Products](https://docs.neuralverge.ai/api-reference/data-sources/run-amazon-seller-products.md): Lists products sold by an Amazon seller's storefront: title, URL, price, rating, and image.
+
+## OpenAPI Specs
+
+- [openapi](/openapi.json)

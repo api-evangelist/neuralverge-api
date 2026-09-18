@@ -1,0 +1,124 @@
+generated: '2026-09-18'
+method: derived
+source: >-
+  Derived by binding the live MCP tools/list (probed anonymously, HTTP 200,
+  2026-09-18) to the published OpenAPI operations. The OpenAPI operations carry
+  no operationId, so REST bindings use the METHOD + path as the operation key.
+surfaces:
+  openapi:
+    file: openapi/neuralverge-api-openapi.json
+    operations: 21
+    note: operationIds absent in the source spec; bindings key on method+path.
+  mcp:
+    url: https://api.neuralverge.ai/functions/v1/mcp-server
+    gated: false
+    note: >-
+      tools/list is anonymously readable (HTTP 200); tool inputSchemas are the
+      authoritative input contract and are 1:1 wrappers of the REST bodies.
+  graphql:
+    present: false
+coverage:
+  tools_named: 15
+  tools_bound: 15
+  mcp_only: 0
+  rest_ops_total: 21
+  rest_ops_with_tool: 15
+crosswalk:
+  - tool: run_research
+    category: AI Research
+    rest: ['POST /functions/v1/run-research']
+    binding: rest
+    confidence: high
+    note: 1:1 wrapper; async, returns session_id.
+  - tool: get_session_status
+    category: AI Research
+    rest: ['GET /functions/v1/get-session-status']
+    binding: rest
+    confidence: high
+  - tool: run_search
+    category: Search
+    rest: ['POST /functions/v1/run-search']
+    binding: rest
+    confidence: high
+  - tool: run_extract
+    category: AI Extract
+    rest: ['POST /functions/v1/run-extract']
+    binding: rest
+    confidence: high
+  - tool: run_linkedin_email
+    category: Data Sources
+    rest: ['POST /functions/v1/run-linkedin-email']
+    binding: rest
+    confidence: high
+  - tool: run_linkedin_domain
+    category: Data Sources
+    rest: ['POST /functions/v1/run-linkedin-domain']
+    binding: rest
+    confidence: high
+  - tool: run_linkedin_company_search
+    category: Data Sources
+    rest: ['POST /functions/v1/run-linkedin-company-search']
+    binding: rest
+    confidence: high
+  - tool: run_linkedin_people_search
+    category: Data Sources
+    rest: ['POST /functions/v1/run-linkedin-people-search']
+    binding: rest
+    confidence: high
+  - tool: run_linkedin_company_employee
+    category: Data Sources
+    rest: ['POST /functions/v1/run-linkedin-company-employee']
+    binding: rest
+    confidence: high
+  - tool: run_email_enrichment
+    category: Data Sources
+    rest: ['POST /functions/v1/run-email-enrichment']
+    binding: rest
+    confidence: high
+  - tool: run_email_validation
+    category: Data Sources
+    rest: ['POST /functions/v1/run-email-validation']
+    binding: rest
+    confidence: high
+  - tool: run_email_finder
+    category: Data Sources
+    rest: ['POST /functions/v1/run-email-finder']
+    binding: rest
+    confidence: high
+  - tool: run_phone_enrichment
+    category: Data Sources
+    rest: ['POST /functions/v1/run-phone-enrichment']
+    binding: rest
+    confidence: high
+  - tool: run_phone_enrichment_us
+    category: Data Sources
+    rest: ['POST /functions/v1/run-phone-enrichment-us']
+    binding: rest
+    confidence: high
+  - tool: run_crunchbase_company
+    category: Data Sources
+    rest: ['POST /functions/v1/run-crunchbase-company']
+    binding: rest
+    confidence: high
+mcp_only: []
+rest_only:
+  - operation: 'POST /functions/v1/run-agent'
+    category: AI Agents
+    reason: >-
+      Reusable saved agents are executed over REST but are not surfaced as a
+      distinct MCP tool (run_research covers ad-hoc research from the MCP side).
+  - operation: 'POST /functions/v1/run-amazon-product-search'
+    category: Data Sources (Amazon)
+    reason: Amazon marketplace lookups are REST-only; not in the MCP tool set.
+  - operation: 'POST /functions/v1/run-amazon-product'
+    category: Data Sources (Amazon)
+    reason: Amazon marketplace lookups are REST-only; not in the MCP tool set.
+  - operation: 'POST /functions/v1/run-amazon-product-offers'
+    category: Data Sources (Amazon)
+    reason: Amazon marketplace lookups are REST-only; not in the MCP tool set.
+  - operation: 'POST /functions/v1/run-amazon-seller'
+    category: Data Sources (Amazon)
+    reason: Amazon marketplace lookups are REST-only; not in the MCP tool set.
+  - operation: 'POST /functions/v1/run-amazon-seller-products'
+    category: Data Sources (Amazon)
+    reason: Amazon marketplace lookups are REST-only; not in the MCP tool set.

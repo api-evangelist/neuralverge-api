@@ -1,0 +1,16 @@
+generated: '2026-09-18'
+method: searched
+source: >-
+  Provider-published Agent Skill, fetched verbatim from
+  https://docs.neuralverge.ai/.well-known/agent-skills/neural/skill.md (HTTP 200,
+  referenced by the A2A agent card's skills[].url).
+skills:
+  - file: neuralverge-api-neural.md
+    name: neural
+    api: openapi/neuralverge-api-openapi.json
+    published_url: https://docs.neuralverge.ai/.well-known/agent-skills/neural/skill.md
+    description: >-
+      Provider-authored skill for building AI-powered research, extraction, and
+      data-enrichment workflows on NeuralVerge (company intelligence, lead
+      enrichment, data validation, structured web scraping, operational
+      automation) across AI Research, AI Extract, Search, and Data Sources.
