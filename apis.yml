@@ -10,6 +10,21 @@ created: '2026-09-18'
 modified: '2026-09-18'
 specificationVersion: '0.21'
 tags:
+  - Company Data
+  - People Data
+  - Contact Enrichment
+  - Email Finder
+  - Email Validation
+  - Phone Lookup
+  - corporate registries
+  - KYB / compliance
+  - Web Extraction
+  - Deep Research
+  - Web Search
+  - LinkedIn data
+  - MCP
+  - AI Agents
+tags_raw:
   - company data
   - people data
   - contact enrichment
@@ -34,6 +49,21 @@ apis:
     baseURL: https://api.neuralverge.ai
     image: https://neuralverge.ai/opengraph-image
     tags:
+      - Company Data
+      - People Data
+      - Contact Enrichment
+      - Email Finder
+      - Email Validation
+      - Phone Lookup
+      - corporate registries
+      - KYB / compliance
+      - Web Extraction
+      - Deep Research
+      - Web Search
+      - LinkedIn data
+      - MCP
+      - AI Agents
+    tags_raw:
       - company data
       - people data
       - contact enrichment
