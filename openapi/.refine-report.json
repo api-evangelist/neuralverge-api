@@ -1,0 +1,25 @@
+{
+  "provider": "neuralverge-api",
+  "sources": [
+    "neuralverge-api-openapi.json"
+  ],
+  "outputs": [
+    "neuralverge-api-ai-agents-api-openapi.yml",
+    "neuralverge-api-ai-extract-api-openapi.yml",
+    "neuralverge-api-ai-research-api-openapi.yml",
+    "neuralverge-api-data-sources-api-openapi.yml",
+    "neuralverge-api-search-api-openapi.yml"
+  ],
+  "archived": [
+    "archived openapi/neuralverge-api-openapi.json"
+  ],
+  "errors": [],
+  "warnings": [
+    "no openapi/_original/ archive: this run re-split PREVIOUSLY REFINED output, so any base URL it carries is inherited from an earlier pass rather than read from a document the provider published"
+  ],
+  "notes": [
+    "neuralverge-api-openapi.json: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "apis.yml register: written (+5 apis, 5 total)"
+  ],
+  "skipped": []
+}
