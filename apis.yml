@@ -25,6 +25,7 @@ tags:
   - MCP
   - AI Agents
   - A2A
+  - Data Enrichment
 tags_raw:
   - company data
   - people data
@@ -42,6 +43,7 @@ tags_raw:
   - AI agents
   - A2A
   - Email Validation
+  - Data Enrichment
 apis:
 - aid: neuralverge-api:neuralverge-api-ai-agents-api
   name: NeuralVerge API AI Agents API
