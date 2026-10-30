@@ -1,4 +1,4 @@
-# NeuralVerge API (neuralverge-api)
+# NeuralVerge API
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,6 +66,123 @@
 
 AI research, web extraction, search, and data enrichment platform exposing a REST API, a public OpenAPI contract, an llms.txt docs index, and a hosted remote MCP server. Capabilities include multi-step AI Research, schema-driven AI Extract, reusable AI Agents workflows, synchronous Search, and 29 data sources spanning company intelligence, corporate registries, contact enrichment, email/phone lookup, and LinkedIn data.
 
-- **Provider:** https://neuralverge.ai
-- **Documentation:** https://docs.neuralverge.ai
-- **Base URL:** https://api.neuralverge.ai
+**Areas:** Company Data · People Data · Contact Enrichment · Email Finder · Email Verification · Phone Lookup · corporate registries · KYB / compliance · Web Extraction · Deep Research · Web Search · LinkedIn data
+
+## NeuralVerge API on APIs.io
+
+Everything profiled for NeuralVerge API is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/neuralverge-api/](https://apis.io/providers/neuralverge-api/)** — or go straight to one of the APIs or properties below.
+
+### APIs (5)
+
+- [NeuralVerge API AI Agents API](https://apis.io/apis/neuralverge-api/neuralverge-api-ai-agents-api/) — Reusable saved agents executed through the API.
+- [NeuralVerge API AI Extract API](https://apis.io/apis/neuralverge-api/neuralverge-api-ai-extract-api/) — Schema-driven extraction workflows.
+- [NeuralVerge API AI Research API](https://apis.io/apis/neuralverge-api/neuralverge-api-ai-research-api/) — Research workflows and session tracking.
+- [NeuralVerge API Data Sources API](https://apis.io/apis/neuralverge-api/neuralverge-api-data-sources-api/) — Focused provider lookups for LinkedIn, email, phone, company, and Amazon data.
+- [NeuralVerge API Search API](https://apis.io/apis/neuralverge-api/neuralverge-api-search-api/) — Fast, synchronous web search with no session or polling.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [neuralverge](https://apis.io/servers/neuralverge-api/neuralverge/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Neuralverge Api Agentic Access](https://apis.io/agentic-access/neuralverge-api/neuralverge-api-agentic-access/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Neuralverge Api Openapi Overlay](https://apis.io/overlays/neuralverge-api/neuralverge-api-openapi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Neuralverge Api Authentication](https://apis.io/security/neuralverge-api/neuralverge-api-authentication/)
+- [Neuralverge Api Domain Security](https://apis.io/security/neuralverge-api/neuralverge-api-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Neuralverge Api Plans Pricing](https://apis.io/plans/neuralverge-api/neuralverge-api-plans-pricing/)
+
+#### Rate limits (1)
+
+Published request limits.
+
+- [Neuralverge Api Rate Limits](https://apis.io/rate-limits/neuralverge-api/neuralverge-api-rate-limits/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://neuralverge.ai/)
+- [Pricing](https://neuralverge.ai/pricing)
+- [Sign up](https://app.neuralverge.ai)
+- [Blog](https://neuralverge.ai/blog)
+- [Terms of service](https://neuralverge.ai/terms)
+- [Privacy policy](https://neuralverge.ai/privacy-center)
+
+## API Evangelist rating
+
+**Kin Score 47.1** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 70.0 |
+| Contract quality | 50.2 |
+| Contract governance | 4.5 |
+| Operational transparency | 31.6 |
+| Developer ergonomics | 47.6 |
+| Access clarity | 63.2 |
+
+**Agent readiness 34.0** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | documented (partial credit) |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | documented (partial credit) |
+| Event Surface Described | — |
+| Agent Skills | yes |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 24.5** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/neuralverge-api/](https://apis.io/providers/neuralverge-api/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for NeuralVerge API: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/neuralverge-api/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
